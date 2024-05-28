@@ -5,7 +5,7 @@ import Mausam from "./components/mausam";
 function App() {
   return (
     <div className="App">
-      <mausam />
+      <Mausam />
     </div>
   );
 }

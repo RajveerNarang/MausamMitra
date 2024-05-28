@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getWeatherByCoordinates } from "../services/mausamService";
 
-const Weather = () => {
+const Mausam = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -15,10 +15,14 @@ const Weather = () => {
             const { latitude, longitude } = position.coords;
             // Fetch weather data using coordinates
             const data = await getWeatherByCoordinates(latitude, longitude);
+            console.log("Weather Data:", data); // Log the weather data to console
             setWeatherData(data);
           });
+        } else {
+          setError("Geolocation is not supported by this browser.");
         }
       } catch (error) {
+        console.error("Error fetching weather data:", error); // Log the error to console
         setError("Failed to fetch weather data");
       }
     };
@@ -28,16 +32,18 @@ const Weather = () => {
 
   return (
     <div className="weather-container">
-      {weatherData && (
+      {weatherData ? (
         <div className="weather-info">
           <h2>Weather in {weatherData.name}</h2>
-          <p>Temperature: {weatherData.main.temp}°C</p>
-          <p>Description: {weatherData.weather[0].description}</p>
+          <p>Temperature: {weatherData.main?.temp}°C</p>
+          <p>Description: {weatherData.weather?.[0]?.description}</p>
         </div>
+      ) : (
+        <div className="loading">Loading...</div>
       )}
       {error && <div className="error">{error}</div>}
     </div>
   );
 };
 
-export default Weather;
+export default Mausam;
